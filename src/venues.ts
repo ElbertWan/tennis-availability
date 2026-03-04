@@ -1,4 +1,6 @@
-export const ALL_VENUES = [
+import type { Venue, TvVenue } from "@/types";
+
+export const ALL_VENUES: Venue[] = [
   // Tennis Australia (play.tennis.com.au)
   { id: "ta-batemans", name: "Batemans Bay Tennis Courts", source: "tennisAu", slug: "BatemansBayTennisCourts", suburb: "Batemans Bay" },
   { id: "ta-bega", name: "Bega Tennis Club", source: "tennisAu", slug: "BegaTennisClub", suburb: "Bega" },
@@ -38,6 +40,6 @@ export const ALL_VENUES = [
   { id: "hills-19", name: "Ted Horwood Reserve Tennis Courts", source: "hills", venueId: 19, bookingSlug: "ted-horwood-reserve-tennis-courts", suburb: "Baulkham Hills" },
 ];
 
-export const TV_VENUES = [
+export const TV_VENUES: TvVenue[] = [
   { id: "tv-north-rocks", name: "North Rocks Tennis Club", source: "tv", clientId: "north-rocks-tc", venueId: "2225", suburb: "North Rocks" },
 ];
