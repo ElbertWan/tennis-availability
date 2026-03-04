@@ -27,15 +27,15 @@ export const ALL_VENUES = [
   { id: "ta-wyong", name: "Wyong District Tennis Association", source: "tennisAu", slug: "WyongDistrictTennisAssociation", suburb: "Wyong" },
 
   // Hills Shire (bookable.net.au)
-  { id: "hills-15", name: "Annangrove Reserve Tennis Courts", source: "hills", venueId: 15, suburb: "Annangrove" },
-  { id: "hills-80", name: "Balmoral Reserve Tennis Courts", source: "hills", venueId: 80, suburb: "Kellyville" },
-  { id: "hills-17", name: "Bella Vista Tennis Courts", source: "hills", venueId: 17, suburb: "Bella Vista" },
-  { id: "hills-20", name: "Bernie Mullane Tennis Courts", source: "hills", venueId: 20, suburb: "Kellyville" },
-  { id: "hills-31", name: "Crestwood Reserve Tennis Courts", source: "hills", venueId: 31, suburb: "Baulkham Hills" },
-  { id: "hills-87", name: "Gables Central Playing Fields Tennis Courts", source: "hills", venueId: 87, suburb: "Box Hill" },
-  { id: "hills-25", name: "Kenthurst Park Tennis Courts", source: "hills", venueId: 25, suburb: "Kenthurst" },
-  { id: "hills-23", name: "Les Shore Reserve Tennis Courts", source: "hills", venueId: 23, suburb: "Glenorie" },
-  { id: "hills-19", name: "Ted Horwood Reserve Tennis Courts", source: "hills", venueId: 19, suburb: "Baulkham Hills" },
+  { id: "hills-15", name: "Annangrove Reserve Tennis Courts", source: "hills", venueId: 15, bookingSlug: "annangrove-reserve-tennis-courts", suburb: "Annangrove" },
+  { id: "hills-80", name: "Balmoral Reserve Tennis Courts", source: "hills", venueId: 80, bookingSlug: "balmoral-reserve-tennis-courts", suburb: "Kellyville" },
+  { id: "hills-17", name: "Bella Vista Tennis Courts", source: "hills", venueId: 17, bookingSlug: "bella-vista-tennis-courts", suburb: "Bella Vista" },
+  { id: "hills-20", name: "Bernie Mullane Tennis Courts", source: "hills", venueId: 20, bookingSlug: "bernie-mullane-tennis-courts", suburb: "Kellyville" },
+  { id: "hills-31", name: "Crestwood Reserve Tennis Courts", source: "hills", venueId: 31, bookingSlug: "crestwood-reserve-tennis-courts", suburb: "Baulkham Hills" },
+  { id: "hills-87", name: "Gables Central Playing Fields Tennis Courts", source: "hills", venueId: 87, bookingSlug: "gables-central-playing-fields-tennis-courts", suburb: "Box Hill" },
+  { id: "hills-25", name: "Kenthurst Park Tennis Courts", source: "hills", venueId: 25, bookingSlug: "kenthurst-park-tennis-courts", suburb: "Kenthurst" },
+  { id: "hills-23", name: "Les Shore Reserve Tennis Courts", source: "hills", venueId: 23, bookingSlug: "les-shore-reserve-tennis-courts", suburb: "Glenorie" },
+  { id: "hills-19", name: "Ted Horwood Reserve Tennis Courts", source: "hills", venueId: 19, bookingSlug: "ted-horwood-reserve-tennis-courts", suburb: "Baulkham Hills" },
 ];
 
 export const TV_VENUES = [
