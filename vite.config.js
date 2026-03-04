@@ -16,6 +16,12 @@ export default defineConfig({
         secure: true,
         rewrite: (path) => path.replace(/^\/hills-api/, '/api'),
       },
+      '/tv-api': {
+        target: 'https://www.tennisvenues.com.au',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/tv-api/, ''),
+      },
     },
   },
 })
