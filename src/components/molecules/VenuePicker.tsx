@@ -48,7 +48,7 @@ export function VenuePicker({ venues, selected, setSelected }: VenuePickerProps)
           {...params}
           size="small"
           placeholder="Search venues..."
-          sx={{ minWidth: 300 }}
+          sx={{ minWidth: { xs: 0, sm: 300 } }}
         />
       )}
       renderOption={(props, option, { selected: isSelected }) => {

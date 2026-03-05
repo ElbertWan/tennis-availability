@@ -2,12 +2,13 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import type { Venue } from "@/types";
 import { TABS } from "@/constants";
-import { ALL_VENUES, TV_VENUES } from "@/venues";
+import { ALL_VENUES, TV_VENUES, SEARCHABLE_VENUES } from "@/venues";
 import { MainLayout } from "@/components/templates/MainLayout";
 import { AppHeader } from "@/components/organisms/AppHeader";
 import { VenueGrid } from "@/components/organisms/VenueGrid";
 import { TvVenueGrid } from "@/components/organisms/TvVenueGrid";
 import { FindAvailableDrawer } from "@/components/organisms/FindAvailableDrawer";
+import { AvailabilityLegend } from "@/components/molecules/AvailabilityLegend";
 import "./App.css";
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
   const [searchDateFrom, setSearchDateFrom] = useState(dayjs());
   const [searchDateTo, setSearchDateTo] = useState(dayjs().add(7, "day"));
   const [searchVenues, setSearchVenues] = useState<Venue[]>(() =>
-    ALL_VENUES.slice(0, 5)
+    SEARCHABLE_VENUES.slice(0, 5)
   );
 
   const currentVenues = activeTab === "main" ? ALL_VENUES : TV_VENUES;
@@ -32,6 +33,7 @@ export default function App() {
   return (
     <MainLayout
       drawerOpen={drawerOpen}
+      onToggleDrawer={() => setDrawerOpen((p) => !p)}
       header={
         <AppHeader
           tabs={TABS}
@@ -50,7 +52,7 @@ export default function App() {
         <FindAvailableDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
-          venues={currentVenues}
+          venues={SEARCHABLE_VENUES}
           startTime={searchStartTime}
           setStartTime={setSearchStartTime}
           endTime={searchEndTime}
@@ -64,6 +66,7 @@ export default function App() {
         />
       }
     >
+      <AvailabilityLegend showCoaching={activeTab === "main"} />
       {activeTab === "main" &&
         ALL_VENUES.filter((v) => selected.includes(v.id)).map((v) => (
           <VenueGrid key={v.id} venue={v} date={selectedDate} />

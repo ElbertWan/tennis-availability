@@ -3,8 +3,8 @@ import { fetchTennisAuAvailability } from "./tennisAuService";
 import { fetchHillsAvailability } from "./hillsService";
 import { fetchTvAvailability } from "./tvService";
 
-export { fetchTennisAuSessions, fetchTennisAuAvailability } from "./tennisAuService";
-export { fetchHillsVenueData, fetchHillsAvailability, resolveOpeningHours, buildBookingsByCourtId } from "./hillsService";
+export { fetchTennisAuSessions, fetchTennisAuAvailability, fetchTennisAuAvailabilityRange } from "./tennisAuService";
+export { fetchHillsVenueData, fetchHillsAvailability, fetchHillsAvailabilityRange, resolveOpeningHours, buildBookingsByCourtId } from "./hillsService";
 export { parseTvHtml, fetchTvBookingData, fetchTvAvailability } from "./tvService";
 
 export async function fetchAvailabilityForVenue(

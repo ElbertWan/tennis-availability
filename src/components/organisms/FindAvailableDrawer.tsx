@@ -8,6 +8,8 @@ import {
   Button,
   Alert,
   LinearProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Close, Search } from "@mui/icons-material";
 import type { Dayjs } from "dayjs";
@@ -67,6 +69,9 @@ export function FindAvailableDrawer({
   searchVenues,
   setSearchVenues,
 }: FindAvailableDrawerProps) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const {
     searching,
     results,
@@ -90,10 +95,10 @@ export function FindAvailableDrawer({
       anchor="right"
       open={open}
       onClose={searching ? undefined : handleClose}
-      variant="persistent"
+      variant={isMobile ? "temporary" : "persistent"}
       sx={{
         "& .MuiDrawer-paper": {
-          width: DRAWER_WIDTH,
+          width: { xs: "100%", sm: DRAWER_WIDTH },
           bgcolor: "background.paper",
           borderLeft: "1px solid",
           borderColor: "divider",

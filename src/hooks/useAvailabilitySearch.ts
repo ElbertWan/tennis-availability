@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import type { Dayjs } from "dayjs";
-import type { Venue, SearchResult, SearchProgress } from "@/types";
-import { fetchAvailabilityForVenue } from "@/services";
+import type { Venue, SearchResult, SearchProgress, AvailabilityResult } from "@/types";
+import { fetchAvailabilityForVenue, fetchTennisAuAvailabilityRange, fetchHillsAvailabilityRange } from "@/services";
 import { minutesToTime } from "@/utils/time";
 
 interface UseAvailabilitySearchResult {
@@ -64,56 +64,87 @@ export function useAvailabilitySearch(
       cursor = cursor.add(1, "day");
     }
 
-    const totalSteps = days.length * searchVenues.length;
+    const rangeVenues = searchVenues.filter(
+      (v) => v.source === "tennisAu" || v.source === "hills"
+    );
+    const perDayVenues = searchVenues.filter(
+      (v) => v.source !== "tennisAu" && v.source !== "hills"
+    );
+
+    const totalSteps =
+      rangeVenues.length + days.length * perDayVenues.length;
     setProgress({ current: 0, total: totalSteps, venue: "" });
 
     const found: SearchResult[] = [];
     let step = 0;
 
+    const requiredSlots: number[] = [];
+    for (let t = startMins; t < endMins; t += 30) requiredSlots.push(t);
+
+    const collectResults = (
+      slots: AvailabilityResult[],
+      venue: Venue,
+      dateStr: string
+    ) => {
+      const dateNative = new Date(dateStr + "T00:00:00");
+      const slotsByCourt = new Map<string, Map<number, (typeof slots)[number]>>();
+      for (const s of slots) {
+        if (s.time === null || s.time === undefined) continue;
+        if (s.time < startMins || s.time >= endMins) continue;
+        if (!slotsByCourt.has(s.court))
+          slotsByCourt.set(s.court, new Map());
+        slotsByCourt.get(s.court)!.set(s.time, s);
+      }
+      for (const [court, courtSlotMap] of slotsByCourt) {
+        const hasAll = requiredSlots.every((t) => courtSlotMap.has(t));
+        if (hasAll) {
+          const firstSlot = courtSlotMap.get(requiredSlots[0]!)!;
+          found.push({
+            venue,
+            date: dateNative,
+            dateStr,
+            time: firstSlot.time,
+            timeLabel:
+              firstSlot.timeLabel || minutesToTime(firstSlot.time!),
+            court,
+            cost: firstSlot.cost,
+            totalAvailable: requiredSlots.length,
+          });
+        }
+      }
+    };
+
+    const startDateStr = dateFrom.format("YYYY-MM-DD");
+    const endDateStr = dateTo.format("YYYY-MM-DD");
+
+    // Range-capable venues: single call per venue for the full date range
+    for (const venue of rangeVenues) {
+      if (cancelledRef.current) { setSearching(false); return; }
+      step++;
+      setProgress({ current: step, total: totalSteps, venue: venue.name });
+      try {
+        const rangeMap =
+          venue.source === "tennisAu"
+            ? await fetchTennisAuAvailabilityRange(venue, startDateStr, endDateStr)
+            : await fetchHillsAvailabilityRange(venue, startDateStr, endDateStr);
+        for (const [dateStr, slots] of rangeMap) {
+          collectResults(slots, venue, dateStr);
+        }
+      } catch {
+        // skip venues that fail
+      }
+    }
+
+    // Other venues: one call per venue per day
     for (const day of days) {
       const dateStr = day.format("YYYY-MM-DD");
-      const dateNative = day.toDate();
-
-      for (const venue of searchVenues) {
-        if (cancelledRef.current) {
-          setSearching(false);
-          return;
-        }
+      for (const venue of perDayVenues) {
+        if (cancelledRef.current) { setSearching(false); return; }
         step++;
         setProgress({ current: step, total: totalSteps, venue: venue.name });
-
         try {
           const slots = await fetchAvailabilityForVenue(venue, dateStr);
-
-          const requiredSlots: number[] = [];
-          for (let t = startMins; t < endMins; t += 30) requiredSlots.push(t);
-
-          const slotsByCourt = new Map<string, Map<number, (typeof slots)[number]>>();
-          for (const s of slots) {
-            if (s.time === null || s.time === undefined) continue;
-            if (s.time < startMins || s.time >= endMins) continue;
-            if (!slotsByCourt.has(s.court))
-              slotsByCourt.set(s.court, new Map());
-            slotsByCourt.get(s.court)!.set(s.time, s);
-          }
-
-          for (const [court, courtSlotMap] of slotsByCourt) {
-            const hasAll = requiredSlots.every((t) => courtSlotMap.has(t));
-            if (hasAll) {
-              const firstSlot = courtSlotMap.get(requiredSlots[0]!)!;
-              found.push({
-                venue,
-                date: dateNative,
-                dateStr,
-                time: firstSlot.time,
-                timeLabel:
-                  firstSlot.timeLabel || minutesToTime(firstSlot.time!),
-                court,
-                cost: firstSlot.cost,
-                totalAvailable: requiredSlots.length,
-              });
-            }
-          }
+          collectResults(slots, venue, dateStr);
         } catch {
           // skip venues that fail
         }

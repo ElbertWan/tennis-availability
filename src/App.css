@@ -158,6 +158,12 @@ body {
   font-size: 0.72rem;
   font-weight: 500;
   color: #000;
+  display: block;
+  max-width: 10ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 auto;
 }
 
 .cell-available {
@@ -225,8 +231,9 @@ body {
 
 /* ─── Responsive ─── */
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .venue-list {
-    padding: 16px;
+    padding: 12px;
+    gap: 20px;
   }
 }

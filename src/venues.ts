@@ -43,3 +43,5 @@ export const ALL_VENUES: Venue[] = [
 export const TV_VENUES: TvVenue[] = [
   { id: "tv-north-rocks", name: "North Rocks Tennis Club", source: "tv", clientId: "north-rocks-tc", venueId: "2225", suburb: "North Rocks" },
 ];
+
+export const SEARCHABLE_VENUES: Venue[] = [...ALL_VENUES, ...TV_VENUES];
